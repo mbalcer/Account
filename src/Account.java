@@ -29,11 +29,16 @@ public class Account {
 		return this.password;
 	}
 	public int credit(int amount) {
-		this.balance += amount;
+		if(amount<0)
+			System.out.println("The amount of money must be greater than 0");
+		else 
+			this.balance += amount;
 		return balance;
 	}
 	public int debit(int amount) {
-		if(amount<=this.balance)
+		if(amount<0)
+			System.out.println("The amount of money must be greater than 0");
+		else if(amount<=this.balance)
 			this.balance -= amount;
 		else
 			System.out.println("Amount exceeded balance");
@@ -42,7 +47,9 @@ public class Account {
 	}
 	
 	public int transferTo(Account another, int amount) {
-		if(amount<=this.balance) {
+		if(amount<0)
+			System.out.println("The amount of money must be greater than 0");
+		else if(amount<=this.balance) {
 			another.balance += amount; 
 			this.balance -= amount;
 		}
