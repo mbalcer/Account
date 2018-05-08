@@ -200,6 +200,63 @@ public class main {
 		}
 		fileIn.close();
 	}
+	
+	public static void deleteAccount() throws IOException {
+		Scanner in = new Scanner(System.in);
+		
+		System.out.println("Podaj nazwe: ");
+		String name = in.nextLine();
+		if(checkNameAccount(name)==false) {
+			System.out.println("Nie ma konta o takiej nazwie w banku b¹dz poda³eœ z³¹ nazwê konta");
+			return;
+		}
+		System.out.println("Podaj has³o: ");
+		String password = in.nextLine();
+		
+		File fileTask = new File("account.txt");
+		Scanner fileIn = new Scanner(fileTask);
+		int numberLine = 0;
+		boolean pass = false;
+		String allInFile[] = new String[howManyLines()];
+		
+		while(fileIn.hasNextLine()) {
+			allInFile[numberLine] = fileIn.nextLine();
+			numberLine++;
+		}
+		
+		
+		fileIn.close();
+		int del=-1;
+		
+		for(int i=0; i<numberLine; i++) {
+			if(pass==true && i % 4 == 2) {
+				if(allInFile[i].equals(password)==false) {
+					System.out.println("Poda³eœ z³e has³o do konta");
+					return;
+				}
+				else {
+					System.out.println("Na pewno chcesz usun¹æ konto "+name+" (T/N)?");
+					String confirmDelete = in.next();
+					if(confirmDelete.equalsIgnoreCase("t")){
+						Writer fileAccountWrite = new BufferedWriter(new FileWriter("account.txt",false)); 
+						for(i=0; i<allInFile.length; i++) {
+							if(i==del)
+								i+=3;
+							else
+								fileAccountWrite.append(allInFile[i]+"\r\n");
+						}
+						fileAccountWrite.close();
+						break;
+					}
+					else return;
+				}
+			}
+			if(allInFile[i].equalsIgnoreCase(name) && i % 4 == 1)	{
+				del = i-1;
+				pass = true;
+			}
+		}
+	}
 
 	public static void main(String[] args) throws IOException {
 		for(;;) {
@@ -218,11 +275,12 @@ public class main {
 				case 1: {
 					createAccount();
 				} break;
-				
 				case 2: {
 					loginToAccount();
 				} break;
-				
+				case 3: {
+					deleteAccount();
+				} break;
 				case 0: {
 					System.exit(0);
 				} break;
